@@ -2,6 +2,17 @@
 
 Import csv files to specified google spreadsheet automatically
 
-# Lisence
+## Lisence
 
 MIT
+
+## REQUIREMENT
+
+- node version 14 or later
+
+## INSTALL
+
+```bash
+yarn install
+clasp login
+```
