@@ -12,7 +12,7 @@ function loadcsv(url: string, sheetname: string) {
 }
 function test() {
   loadcsv(
-    "https://mynumbercard.code4japan.org/static/demographics-def6a69047912fc2c4b313a88ed61f89.csv",
+    "https://mynumbercard.code4japan.org/static/data/20200601/demographics.csv",
     "20200601"
   );
 }
