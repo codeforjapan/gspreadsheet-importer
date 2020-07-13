@@ -12,8 +12,7 @@ MIT
 
 ## INSTALL
 
-
-### Clone and install clasp,  login
+### Clone and install clasp, login
 
 ```bash
 yarn install
@@ -63,7 +62,7 @@ Then copy プロジェクト番号(project ID), Open GAS page and set the ID by 
 
 ![image](https://i.imgur.com/DEXNlnD.png)
 
-Enter the project ID and puress 設定 button.
+Enter the project ID and press 設定 button.
 
 If you do this first time the system shows link to creating Agreement page (同意画面). Please create it from the shown link.
 
@@ -116,9 +115,6 @@ Running in dev mode.
 No response.
 ```
 
-It will create new sheet called `20200601`.
-
+It will create new sheet named `20200601` on the spreadsheet.
 
 If the system says that `Script API executable not published/deployed.`, please publish the app as web API and retry again.
-
-
