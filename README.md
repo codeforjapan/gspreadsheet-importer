@@ -64,6 +64,14 @@ Then copy プロジェクト番号(project ID), Open GAS page and set the ID by 
 
 Enter the project ID and press 設定 button.
 
+### Enable Google Drive API on the project.
+
+Please find `Google Drive API` and enable it.
+
+![](https://i.imgur.com/JJY9nAq.png)
+
+## Create agreement page
+
 If you do this first time the system shows link to creating Agreement page (同意画面). Please create it from the shown link.
 
 After that, Press 設定 button again.
@@ -103,18 +111,32 @@ claspclasp login --creds .creds.json
 
 ### Publish executable API
 
-Open GAS window and make executable API.
-
-![](https://i.imgur.com/YWgSPLe.png)
-
-Then run the test script
+Push latest code
 
 ```bash
-% clasp run test
+% clasp push
+? Manifest file has been updated. Do you want to push and overwrite? Yes
+└─ src/Code.ts
+└─ src/appsscript.json
+Pushed 2 files.
+```
+
+Open GAS window and publish it as a web api
+
+```bash
+clasp open
+```
+
+![](https://i.imgur.com/CJuEqj5.png)
+
+Then run init script
+
+```bash
+% clasp run init # it will require
 Running in dev mode.
 No response.
 ```
 
-It will create new sheet named `20200601` on the spreadsheet.
+It will create new drive named `gspreadsheet-importer` on your root drive.
 
 If the system says that `Script API executable not published/deployed.`, please publish the app as web API and retry again.

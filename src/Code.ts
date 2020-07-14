@@ -21,11 +21,23 @@ function init() {
   const token = PropertiesService.getScriptProperties().getProperty(
     PROP_DRIOVE_ID
   );
+  var output = "";
   if (token) {
-    console.log(`Already initalized: drive ID = ${token}`);
+    output = `Already initalized: drive ID = ${token}`;
   } else {
-    console.log("initialize");
+    const folder = DriveApp.createFolder("gspreadsheet-importer");
+    if (folder) {
+      output = `A new folder was created. ID=${folder.getId()}\n`;
+      PropertiesService.getScriptProperties().setProperty(
+        PROP_DRIOVE_ID,
+        folder.getId()
+      );
+      output = output + "Initialized.";
+    } else {
+      output = "Failed to create new folder.\n";
+    }
   }
+  return output;
 }
 function test() {
   loadcsv(
