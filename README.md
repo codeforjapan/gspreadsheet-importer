@@ -109,7 +109,7 @@ Then login again.
 claspclasp login --creds .creds.json
 ```
 
-### Publish executable API
+### Publish web API
 
 Push latest code
 
@@ -144,7 +144,7 @@ Get deployment ID by running `clasp deployments` and copy the ID of `web app met
 Then craete .env file for the deployment
 
 ```bash
-echo 'DEPLOYMENT_ID="YOUR_ID"' > .env
+echo 'DEPLOYMENT_ID="{THE_DEPLOYMENT_ID}"' > .env
 ```
 
 ### initialize
@@ -158,8 +158,6 @@ No response.
 ```
 
 It will create new drive named `gspreadsheet-importer` on your root drive.
-
-If the system says that `Script API executable not published/deployed.`, please publish the app as web API and retry again.
 
 ### Publish the source from next time
 
