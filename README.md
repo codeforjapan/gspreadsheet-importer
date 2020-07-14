@@ -121,13 +121,33 @@ Push latest code
 Pushed 2 files.
 ```
 
-Open GAS window and publish it as a web api
+Open GAS window and publish the script as a web api from publish(公開) -> as a web application (ウェブアプリケーションで公開)
 
 ```bash
 clasp open
 ```
 
-![](https://i.imgur.com/CJuEqj5.png)
+![image](https://i.imgur.com/CJuEqj5.png)
+
+### setup deploymant ID
+
+Get deployment ID by running `clasp deployments` and copy the ID of `web app meta-version`.
+
+```bash
+% clasp deployments
+3 Deployments.
+- AKfycbzHZHW0B..... @HEAD
+- AKfycbyC-KNRe..... @2 - oneplatform api meta-version
+- AKfycbwWBEjxk..... @2 - web app meta-version
+```
+
+Then craete .env file for the deployment
+
+```bash
+echo 'DEPLOYMENT_ID="YOUR_ID"' > .env
+```
+
+### initialize
 
 Then run init script
 
@@ -140,3 +160,7 @@ No response.
 It will create new drive named `gspreadsheet-importer` on your root drive.
 
 If the system says that `Script API executable not published/deployed.`, please publish the app as web API and retry again.
+
+### Publish the source from next time
+
+Please run `make push`
