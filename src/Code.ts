@@ -90,54 +90,51 @@ function getInitialDriveID() {
   return output;
 }
 function test() {
-  const files = {
-    all_prefectures: {
-      "20170308":
-        "https://mynumbercard.code4japan.org/static/data/20170308/all_prefectures.csv",
-      "20170515":
-        "https://mynumbercard.code4japan.org/static/data/20170515/all_prefectures.csv",
-      "20170831":
-        "https://mynumbercard.code4japan.org/static/data/20170831/all_prefectures.csv",
-      "20171201":
-        "https://mynumbercard.code4japan.org/static/data/20171201/all_prefectures.csv",
-      "20180301":
-        "https://mynumbercard.code4japan.org/static/data/20180301/all_prefectures.csv",
-      "20180701":
-        "https://mynumbercard.code4japan.org/static/data/20180701/all_prefectures.csv",
-      "20181201":
-        "https://mynumbercard.code4japan.org/static/data/20181201/all_prefectures.csv",
-      "20190401":
-        "https://mynumbercard.code4japan.org/static/data/20190401/all_prefectures.csv",
-      "20190701":
-        "https://mynumbercard.code4japan.org/static/data/20190701/all_prefectures.csv",
-      "20190916":
-        "https://mynumbercard.code4japan.org/static/data/20190916/all_prefectures.csv",
-      "20191101":
-        "https://mynumbercard.code4japan.org/static/data/20191101/all_prefectures.csv",
-      "20200120":
-        "https://mynumbercard.code4japan.org/static/data/20200120/all_prefectures.csv",
-      "20200301":
-        "https://mynumbercard.code4japan.org/static/data/20200301/all_prefectures.csv",
-      "20200401":
-        "https://mynumbercard.code4japan.org/static/data/20200401/all_prefectures.csv",
-      "20200501":
-        "https://mynumbercard.code4japan.org/static/data/20200501/all_prefectures.csv",
-      "20200601":
-        "https://mynumbercard.code4japan.org/static/data/20200601/all_prefectures.csv",
-      "20200701":
-        "https://mynumbercard.code4japan.org/static/data/20200701/all_prefectures.csv",
-    },
-  };
+  const baseUrl = "https://mynumbercard.code4japan.org/static/data/";
+  const dates = [
+    "20170308",
+    "20170515",
+    "20170831",
+    "20171201",
+    "20180301",
+    "20180701",
+    "20181201",
+    "20190401",
+    "20190701",
+    "20190916",
+    "20191101",
+    "20200120",
+    "20200301",
+    "20200401",
+    "20200501",
+    "20200601",
+    "20200701",
+  ];
+  const filenames = [
+    "all_prefectures.csv",
+    "all_localgovs.csv",
+    "summary_by_types.csv",
+    "demographics.csv",
+  ];
   let output = "";
-  for (let key in files.all_prefectures) {
-    const sheet = getSheetInstance("prefectures");
+
+  filenames.forEach((file: string) => {
+    output = output + `\ncreate file ${file}`;
+    console.log("load file " + file);
+    const sheet = getSheetInstance(file);
     if (!sheet) {
-      output = output + `\nsheet 'prefectures' can't be loaded.`;
+      output = output + `\nsheet '${file}' can't be loaded.`;
     } else {
-      output = output + `\n load ${key}.`;
-      loadcsv(sheet, key, files.all_prefectures[key]);
+      output = output + `\n load ${file}.`;
+      let keys = dates;
+      if (file == "demographics.csv") {
+        keys.shift();
+      }
+      keys.forEach((key: string) => {
+        loadcsv(sheet, key, baseUrl + key + "/" + file);
+      });
     }
-  }
+  });
   return output;
   /*
   loadcsv(
