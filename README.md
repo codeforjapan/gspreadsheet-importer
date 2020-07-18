@@ -58,17 +58,19 @@ Goto [Google Cloud Platform Console](https://console.cloud.google.com/) and crea
 
 ![image](https://i.imgur.com/k5eGxWv.png)
 
-Then copy プロジェクト番号(project ID), Open GAS page and set the ID by selecting the menu `Resource` -> `Cloud Platform Project`
-
-![image](https://i.imgur.com/DEXNlnD.png)
-
-Enter the project ID and press 設定 button.
-
 ### Enable Google Drive API on the project.
 
 Please find `Google Drive API` and enable it.
 
 ![](https://i.imgur.com/JJY9nAq.png)
+
+### Copy project ID and set it to the script.
+
+Then copy プロジェクト番号(project ID), Open GAS page by executing `clasp open` and set the ID by selecting the menu `Resource` -> `Cloud Platform Project`
+
+![image](https://i.imgur.com/DEXNlnD.png)
+
+Paste the copied project ID and press 設定 button.
 
 ## Create agreement page
 
