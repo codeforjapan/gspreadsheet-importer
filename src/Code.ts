@@ -102,7 +102,9 @@ function getInitialDriveID() {
 /**
  * Please write your own function referencing the test() method
  */
-function sync() {}
+function sync() {
+  // MAGIC IS HERE
+}
 /**
  * test method
  */
@@ -137,19 +139,26 @@ function test() {
     ]
   } 
   */
+  // get json
   var response = UrlFetchApp.fetch(feedurl);
   var data = JSON.parse(response.getContentText());
+  // base URL
   const baseURL = data.home_page_url;
+  // Logging
   var output = `base URL is '${baseURL}`;
+  // loop file names
   data.items.forEach((file: any) => {
     output = output + `\ncreate file ${file.name}`;
     console.log("load file " + file.name);
+    // get Sheet instance from file name
     const sheet = getSheetInstance(file.name);
     if (!sheet) {
       output = output + `\nsheet '${file.name}' can't be loaded.`;
     } else {
       output = output + `\n load ${file.name}.`;
+      // loop files
       file.files.forEach((item: any) => {
+        // load csv into the sheet instance
         loadcsv(sheet, item.dir, baseURL + item.href);
       });
     }
