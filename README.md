@@ -58,13 +58,13 @@ Goto [Google Cloud Platform Console](https://console.cloud.google.com/) and crea
 
 ![image](https://i.imgur.com/k5eGxWv.png)
 
-### Enable Google Drive API on the project.
+### Enable Google Drive API on the project
 
 Please find `Google Drive API` and enable it.
 
-![](https://i.imgur.com/JJY9nAq.png)
+![image](https://i.imgur.com/JJY9nAq.png)
 
-### Copy project ID and set it to the script.
+### Copy project ID and set it to the script
 
 Then copy プロジェクト番号(project ID), Open GAS page by executing `clasp open` and set the ID by selecting the menu `Resource` -> `Cloud Platform Project`
 
@@ -99,11 +99,11 @@ clasp open --creds
 
 The command will open new browser, then please create new credential of `OAuth client` by`＋認証情報を作成` link, The application type should be `デスクトップアプリ`, any name is OK.
 
-![](https://i.imgur.com/5mAsUmg.png)
+![image](https://i.imgur.com/5mAsUmg.png)
 
 After creating the credential, please download the credential data, then locate it as `.cred.json` at this project root holder.
 
-![](https://i.imgur.com/ZY4uQhx.png)
+![image](https://i.imgur.com/ZY4uQhx.png)
 
 Then login again.
 

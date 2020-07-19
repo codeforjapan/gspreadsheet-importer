@@ -25,6 +25,10 @@ function init() {
   }
   return output;
 }
+/**
+ * get SpreadSheet class instance of specified file name
+ * @param filename of the spreadsheet
+ */
 function getSheetInstance(
   filename: string
 ): GoogleAppsScript.Spreadsheet.Spreadsheet {
@@ -68,6 +72,9 @@ function loadcsv(
   var csv = Utilities.parseCsv(data);
   sheet.getRange(1, 1, csv.length, csv[0].length).setValues(csv);
 }
+/**
+ * get data folder instance
+ */
 function getFolder(): GoogleAppsScript.Drive.Folder | null {
   const token = PropertiesService.getScriptProperties().getProperty(
     PROP_DRIOVE_ID
@@ -78,6 +85,9 @@ function getFolder(): GoogleAppsScript.Drive.Folder | null {
     return null;
   }
 }
+/**
+ * get initial drive ID
+ */
 function getInitialDriveID() {
   var output = "";
   const folder = getFolder();
@@ -89,60 +99,60 @@ function getInitialDriveID() {
   }
   return output;
 }
+/**
+ * Please write your own function referencing the test() method
+ */
+function sync() {}
+/**
+ * test method
+ */
 function test() {
-  const baseUrl = "https://mynumbercard.code4japan.org/static/data/";
-  const dates = [
-    "20170308",
-    "20170515",
-    "20170831",
-    "20171201",
-    "20180301",
-    "20180701",
-    "20181201",
-    "20190401",
-    "20190701",
-    "20190916",
-    "20191101",
-    "20200120",
-    "20200301",
-    "20200401",
-    "20200501",
-    "20200601",
-    "20200701",
-  ];
-  const filenames = [
-    "all_prefectures.csv",
-    "all_localgovs.csv",
-    "summary_by_types.csv",
-    "demographics.csv",
-  ];
-  let output = "";
-
-  filenames.forEach((file: string) => {
-    output = output + `\ncreate file ${file}`;
-    console.log("load file " + file);
-    const sheet = getSheetInstance(file);
+  // feed URL
+  const feedurl = "https://mynumbercard.code4japan.org/feed-1.json";
+  /*
+  the feed-1.json is a json file which contains the csv data like this
+  ```
+  {
+    feed_url: "https://mynumbercard.code4japan.org/feed-1.json",
+    home_page_url: "https://mynumbercard.code4japan.org",
+    items: [
+      {
+        name: "all_localgovs.csv",
+        files: [
+          {
+            dir: "20200701",
+            href: "/static/data/20200701/all_localgovs.csv"
+          },
+          {
+            dir: "20200601",
+            href: "/static/data/20200601/all_localgovs.csv"
+          },
+          ...
+        ]
+      },
+      {
+        name: "all_prefectures",
+        items: [...]
+      }...
+    ]
+  } 
+  */
+  var response = UrlFetchApp.fetch(feedurl);
+  var data = JSON.parse(response.getContentText());
+  const baseURL = data.home_page_url;
+  var output = `base URL is '${baseURL}`;
+  data.items.forEach((file: any) => {
+    output = output + `\ncreate file ${file.name}`;
+    console.log("load file " + file.name);
+    const sheet = getSheetInstance(file.name);
     if (!sheet) {
-      output = output + `\nsheet '${file}' can't be loaded.`;
+      output = output + `\nsheet '${file.name}' can't be loaded.`;
     } else {
-      output = output + `\n load ${file}.`;
-      let keys = dates;
-      if (file == "demographics.csv") {
-        keys.shift();
-      }
-      keys.forEach((key: string) => {
-        loadcsv(sheet, key, baseUrl + key + "/" + file);
+      output = output + `\n load ${file.name}.`;
+      file.files.forEach((item: any) => {
+        loadcsv(sheet, item.dir, baseURL + item.href);
       });
     }
   });
   return output;
-  /*
-  loadcsv(
-    "https://mynumbercard.code4japan.org/static/data/20200601/demographics.csv",
-    {
-      sheetName: "20200601",
-      fileName: "demographits",
-    }
-  );
-  */
 }
