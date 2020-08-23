@@ -42,13 +42,88 @@ function getSheetInstance(
   const files = folder.getFilesByName(filename);
   if (files.hasNext()) {
     const file = files.next();
-    return SpreadsheetApp.openById(file.getId());
+    const sheet = SpreadsheetApp.openById(file.getId());
+    return sheet;
   } else {
     const sheet = SpreadsheetApp.create(filename);
     // save to initial folder
     const file = DriveApp.getFileById(sheet.getId());
     folder.addFile(file);
     return sheet;
+  }
+}
+/**
+ * initialize sheet. this function create empty sheet without specified name
+ * @param sheet
+ * @param sheetname
+ */
+function initSheet(
+  sheet: GoogleAppsScript.Spreadsheet.Spreadsheet,
+  sheetname: string
+) {
+  // create sheet if there is no sheet
+  if (!sheet.getSheetByName(sheetname)) {
+    sheet.insertSheet(sheetname);
+  } else {
+    // if already exists, delete all data
+    const s = sheet.getSheetByName(sheetname);
+    s.insertRows(1, 1);
+    s.deleteRows(2, s.getLastRow() - 1);
+  }
+  const sheets = sheet.getSheets();
+  // remove unneeded sheets
+  sheets.forEach((s) => {
+    if (s.getName() != sheetname) {
+      sheet.deleteSheet(s);
+    }
+  });
+}
+/**
+ * init SpreadSheet class instance of specified file name
+ * @param filename of the spreadsheet
+ * @param sheetname sheet name
+ */
+function initSheetInstance(
+  filename: string,
+  sheetname: string
+): GoogleAppsScript.Spreadsheet.Spreadsheet {
+  const folder = getFolder();
+  if (folder == null) {
+    console.error(
+      "folder is not able to be created. maybe script is not initialized"
+    );
+    return null;
+  }
+  // find file
+  const files = folder.getFilesByName(filename);
+  if (files.hasNext()) {
+    // file already exists
+    const file = files.next();
+    const sheet = SpreadsheetApp.openById(file.getId());
+    initSheet(sheet, sheetname);
+    return sheet;
+  } else {
+    // create new file
+    const sheet = SpreadsheetApp.create(filename);
+    initSheet(sheet, sheetname);
+    // save to initial folder
+    const file = DriveApp.getFileById(sheet.getId());
+    folder.addFile(file);
+    return sheet;
+  }
+}
+function removeSheet(filename: string) {
+  const folder = getFolder();
+  if (folder == null) {
+    console.error(
+      "folder is not able to be created. maybe script is not initialized"
+    );
+    return null;
+  }
+  const files = folder.getFilesByName(filename);
+  if (files.hasNext()) {
+    const file = files.next();
+    folder.removeFile(file);
   }
 }
 /**
@@ -71,6 +146,34 @@ function loadcsv(
   sheet = spreadsheetObj.insertSheet(sheetname);
   var csv = Utilities.parseCsv(data);
   sheet.getRange(1, 1, csv.length, csv[0].length).setValues(csv);
+}
+/**
+ * append csv data into speficic file and sheet
+ * @param url
+ * @param options
+ */
+function appendcsv(
+  spreadsheetObj: GoogleAppsScript.Spreadsheet.Spreadsheet,
+  sheetname: string,
+  url: string
+) {
+  console.log(`load sheet from ${url}`);
+  var response = UrlFetchApp.fetch(url);
+  var data = response.getContentText();
+  var sheet = spreadsheetObj.getSheetByName("summary");
+  if (!sheet) {
+    sheet = spreadsheetObj.insertSheet(sheetname);
+  }
+  var csv = Utilities.parseCsv(data);
+  if (sheet.getLastRow() == 0) {
+    sheet.getRange(1, 1, csv.length, csv[0].length).setValues(csv);
+  } else {
+    // append
+    csv.shift(); // remove header row
+    sheet
+      .getRange(sheet.getLastRow() + 1, 1, csv.length, csv[0].length)
+      .setValues(csv);
+  }
 }
 /**
  * get data folder instance
@@ -151,7 +254,7 @@ function test() {
     output = output + `\ncreate file ${file.name}`;
     console.log("load file " + file.name);
     // get Sheet instance from file name
-    const sheet = getSheetInstance(file.name);
+    const sheet = initSheetInstance(file.name, "summary");
     if (!sheet) {
       output = output + `\nsheet '${file.name}' can't be loaded.`;
     } else {
@@ -159,7 +262,7 @@ function test() {
       // loop files
       file.files.forEach((item: any) => {
         // load csv into the sheet instance
-        loadcsv(sheet, item.dir, baseURL + item.href);
+        appendcsv(sheet, "summary", baseURL + item.href);
       });
     }
   });
