@@ -68,7 +68,9 @@ function initSheet(
     // if already exists, delete all data
     const s = sheet.getSheetByName(sheetname);
     s.insertRows(1, 1);
-    s.deleteRows(2, s.getLastRow() - 1);
+    if (s.getLastRow() > 2){
+      s.deleteRows(2, s.getLastRow() - 1);
+    }
   }
   const sheets = sheet.getSheets();
   // remove unneeded sheets
